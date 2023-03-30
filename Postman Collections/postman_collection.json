@@ -1,0 +1,234 @@
+{
+	"info": {
+		"_postman_id": "643551a3-01e5-4f70-8ddf-1692c5ba43f3",
+		"name": "Postman collection",
+		"description": "Makes four requests to HTTPBin (httpbin.org) and tests Newman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET with URL Params",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1ee03e2e-ca85-4585-ad43-3da4dc5ebda1",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"",
+							"let jsonData = pm.response.json();",
+							"",
+							"pm.test(\"Your test name\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    pm.expect(jsonData.args.isGood).to.eql('true');",
+							"    pm.expect(jsonData.args.isBad).to.eql('false');",
+							"});"
+						]
+					}
+				}
+			],
+			"id": "d6c85c2d-d895-4115-a8b7-ace206899b2b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/get?isGood=true&isBad=false",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "isGood",
+							"value": "true"
+						},
+						{
+							"key": "isBad",
+							"value": "false"
+						}
+					]
+				},
+				"description": "Simple GET request with URL Parameters"
+			},
+			"response": []
+		},
+		{
+			"name": "POST with JSON body",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0830edc2-04ae-4338-be88-d3df3d7d023f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test user name\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.json.name).to.eql(\"john\");",
+							"});",
+							"",
+							"pm.test(\"Test permissions 1\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.json.permissions).to.be.an(\"array\");",
+							"    pm.expect(data.json.permissions[2]).to.eql(4000);",
+							"});",
+							"pm.test(\"Test permissions 2\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.json.permissions).to.be.an(\"array\");",
+							"    pm.expect(data.json.permissions[1]).to.eql(3000);",
+							"});",
+							"pm.test(\"Test permissions 3\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.json.permissions).to.be.an(\"array\");",
+							"    pm.expect(data.json.permissions[0]).to.eql(2000);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "41d382da-1dda-4964-b6b1-d95a4cebbafe",
+						"exec": [
+							"let date = Date.now();",
+							"",
+							"pm.globals.set(\"currentDate\", date);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"id": "91e58081-f20a-4758-97c0-7c16caf22acf",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"john\",\n    \"permissions\": [2000,3000,4000]\n}"
+				},
+				"url": "http://httpbin.org/post"
+			},
+			"response": []
+		},
+		{
+			"name": "PUT with form data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5761263c-d54b-4ba9-9077-a5dc454fb3ac",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Test form data\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.form.username).to.eql(\"johndoe\");",
+							"});"
+						]
+					}
+				}
+			],
+			"id": "40de4e69-21a4-46b0-98c1-be8035f132ab",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "johndoe",
+							"type": "text"
+						}
+					]
+				},
+				"url": "http://httpbin.org/put"
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f8135760-3dbd-4d08-be75-0413ee56c981",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"id": "79cfecdf-ca09-4c09-8371-1db159f435ed",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://httpbin.org/delete"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "05f0dc0e-8321-46c7-8e5e-18f665f5de43",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "df28db57-16a7-432d-8bd7-8f68e97e1894",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
