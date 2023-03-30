@@ -96,6 +96,12 @@
 							"    let data = pm.response.json();",
 							"    pm.expect(data.json.permissions).to.be.an(\"array\");",
 							"    pm.expect(data.json.permissions[0]).to.eql(2000);",
+							"});",
+							"",
+							"pm.test(\"Test permissions 4\", function () {",
+							"    let data = pm.response.json();",
+							"    pm.expect(data.json.permissions).to.be.an(\"array\");",
+							"    pm.expect(data.json.permissions[0]).to.eql(2000);",
 							"});"
 						],
 						"type": "text/javascript"
